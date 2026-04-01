@@ -1,0 +1,23 @@
+
+GET http://localhost:3000
+
+###
+
+GET http://localhost:3000/produtos?categoria=informatica
+
+###
+GET http://localhost:3000/produtos
+
+###
+GET http://localhost:3000/funcionarios/2
+
+###
+
+POST http://localhost:3000/produtos
+Content-Type: : application/json
+
+{
+    "nome" : "GEFORCE RTX 5090",
+    "preco" : 15000,
+    "categoria": "informatica"
+}
