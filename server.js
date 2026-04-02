@@ -8,19 +8,13 @@ app.use(express.json());
 // Criar lista de produtos
 
 let produtos =  [
-    {id: 1 , nome : "Notebook", preco : 2500, categoria : "informatica"},
-    {id: 2 , nome : "Mouse", preco : 50, categoria : "informatica"},
-    {id: 3 , nome : "PS4", preco : 2500, categoria : "informatica"},
-    {id: 4 , nome : "Monitor", preco : 2500, categoria : "informatica"},
-    {id: 5 , nome : "PS4", preco : 2500, categoria : "informatica"},
+    {id: 1 , nome: "Notebook", preco : 2500, categoria : "informatica"},
+    {id: 2 , nome: "Mouse", preco : 50, categoria : "informatica"},
+    {id: 3 , nome: "PS4", preco : 2500, categoria : "informatica"},
+    {id: 4 , nome: "Monitor", preco : 2500, categoria : "informatica"},
+    {id: 5 , nome: "PS4", preco : 2500, categoria : "informatica"},
 ];
 
-let funcionarios = [
-    {id: 1 , nome : "Tiago Augusto", salario: 1600 , idade : 18 , setor : "botanico"},
-    {id: 2 , nome : "Carlos Eduardo", salario: 1600 , idade : 17 , setor : "nutricionista esportivo"},
-    {id: 3 , nome : "Tamires Alves", salario: 1600 , idade : 17 , setor : "producao"},
-    {id: 4 , nome : "Lucas Cruz", salario: 1600 , idade : 17 , setor : "desenvolvimento"},
-]
 
 // GET - mensagem de boas vindas
 app.get("/", (req,res) =>
@@ -28,23 +22,6 @@ app.get("/", (req,res) =>
     res.json({ mensagem : "Bem vindo a minha API!"});
 });
 
-//GET - listar funcionarios
-
-app.get("/funcionarios",(req,res) =>{
-
-    return res.json(funcionarios)
-})
-
-app.get("/funcionarios/:id", (req,res) => {
-    const id = parseInt(req.params.id);
-    const funcionario = funcionarios.find((p) => p.id === id)
-
-    if (!funcionario){
-        return res.status(404).json({ erro : "Funcionario não encontrado"});
-    }
-
-    res.json(funcionario)
-})
 
 //GET - listar produtos
 app.get("/produtos",(req,res) =>{
@@ -73,23 +50,45 @@ app.get("/produtos/:id", (req,res) =>{
     res.json(produto);
 });
 
-//POST - criar novo produto
-app.post("/produtos", (req,res) => 
-{
-    const {nome , preco} = req.body;
-    // Validaçoes
-
-    if (!nome || !preco){
-        return res.status(400).json({ erro : "Nome e preço são obrigatorios"});
+// POST - Criar novo produto
+app.post("/produtos", (req, res) => {
+    const { nome, preco, categoria } = req.body;
+  
+    if (!nome || preco == null) {
+      return res.status(400).json({ erro: "Nome e preço são obrigatórios" });
     }
-    const ultimoId = produtos.length > 0 ? produtos[produtos.length - 1].id : 0;
+  
+    if (typeof preco !== "number" || preco <= 0) {
+      return res.status(400).json({ erro: "Preço deve ser um número positivo" });
+    }
+  
+    const ultimoId = produtos.length > 0
+      ? Math.max(...produtos.map(p => p.id))
+      : 0;
+  
     const novoProduto = {
-        id : ultimoId + 1,
-        nome,
-        preco,
+      id: ultimoId + 1,
+      nome,
+      preco,
+      categoria,
     };
+  
     produtos.push(novoProduto);
+  
     res.status(201).json(novoProduto);
+  });
+  
+//DELETE - remover produto
+app.delete("/produtos/:id", (req,res) => {
+const id = parseInt(req.params.id);
+const index = produtos.findIndex((p) => p.id === id);
+
+if (index === -1){
+    return res.status(404).json({erro : "Produto não encontrado"});
+}
+
+const removido = produtos.splice(index,1);
+res.json({mensagem : "Produto removido" , produto : removido[0] });
 })
 
 
