@@ -1,7 +1,26 @@
+<<<<<<< HEAD
+=======
+
+GET http://localhost:3000
+
+###
+
+GET http://localhost:3000/produtos?categoria=informatica
+
+###
+GET http://localhost:3000/produtos
+
+###
+GET http://localhost:3000/produtos/2
+
+###
+
+>>>>>>> cd2b52b8275bbc45e4e1192910070c0619011fa2
 POST http://localhost:3000/produtos
 Content-Type: application/json 
 
 {
+<<<<<<< HEAD
     "nome" : "CD da xuxa invertido",
     "preco" : 150000,
     "categoria" : "produtos-lendarios"
@@ -10,3 +29,9 @@ Content-Type: application/json
 ###
 
 GET http://localhost:3000/produtos
+=======
+    "nome":"GEFORCE RTX 5090",
+    "preco":15000,
+    "categoria":"informatica",
+}
+>>>>>>> cd2b52b8275bbc45e4e1192910070c0619011fa2
